@@ -39,7 +39,7 @@ $ ansible-galaxy collection install ansible.posix
 
 2. Clone or download this project to your workstation or bastion host
     ```
-    $ git clone https://github.com/****
+    $ git clone git@github.com:exodusprime1337/Kubernetes-Cluster-Creator.git
     ```
 
 3. Configure your `/etc/hosts` file on your `bastion or workstation` host
