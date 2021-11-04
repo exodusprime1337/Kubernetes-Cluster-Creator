@@ -1,0 +1,37 @@
+---
+- name: Create K8s Cluster Configuration
+  shell: kubeadm config print init-defaults | tee ClusterConfiguration.yaml
+
+- name: Modify ClusterConfiguration.yaml with control plane IP and criSocket
+  shell: |
+    sed -i '/name/d' ClusterConfiguration.yaml
+    sed -i 's/ advertiseAddress: 1.2.3.4/ advertiseAddress: {{ control_plane_ip }}/' ClusterConfiguration.yaml
+    sed -i 's/ criSocket: \/var\/run\/dockershim\.sock/ criSocket: \/run\/containerd\/containerd\.sock/' ClusterConfiguration.yaml
+    cat << EOF | cat >> ClusterConfiguration.yaml
+    ---
+    apiVersion: kubelet.config.k8s.io/v1beta1
+    kind: KubeletConfiguration
+    cgroupDriver: systemd
+    EOF
+
+- name: Initialize master node
+  shell: kubeadm init --config=ClusterConfiguration.yaml
+
+- name: Add kubectl to user shell
+  shell: |
+    mkdir -p $HOME/.kube
+    cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+    chown $(id -u):$(id -g) $HOME/.kube/config
+
+- name: Install Calico CNI runtime
+  shell: kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+  when: k8s_cni == "calico"
+
+- name: Collect join command for worker nodes
+  register: k8sjoincommand
+  shell: kubeadm token create --print-join-command
+
+- name: Register kubeadm join command to dummy host
+  add_host:
+    name: "k8s_token_holder"
+    command: "{{ k8sjoincommand.stdout }}"

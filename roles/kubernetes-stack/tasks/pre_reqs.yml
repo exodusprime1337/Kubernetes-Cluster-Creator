@@ -1,0 +1,28 @@
+---
+- name: Set SeLinux state
+  selinux:
+    policy: targeted
+    state: "{{ selinux_state }}"
+  
+# - name: Uninstall kubernetes packages
+#   yum:
+#     name: [kubelet,kubeadm,kubectl]
+#     disable_excludes: kubernetes
+#     state: removed
+
+- name: Fully update OS packages
+  package:
+    name: "*"
+    state: latest
+
+- name: Install packages required for Kubernetes
+  ansible.builtin.package:
+    name: "{{ item }}"
+  loop:
+    - "{{ redhat_packages }}"
+
+- name: Disable firewalld service
+  ansible.builtin.service:
+    name: firewalld
+    state: stopped
+    enabled: no

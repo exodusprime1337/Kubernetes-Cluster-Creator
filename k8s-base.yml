@@ -1,0 +1,17 @@
+---
+- name: K8S Setup Base
+  hosts: k8snodes
+  remote_user: root
+  become: yes
+  become_method: sudo
+  vars:
+    k8s_version: "1.22.3-0"             # Use the long k8s version numbers. IE: "1.22.3-0"
+    selinux_state: permissive           # Using a restrictive selinux may require configs not in playbook
+    timezone: "America/Chicago"         # Choose your timezone
+    k8s_cni: calico                     # Choose your CNI. NOTE: Calico is only supported at this time
+    container_runtime: containerd       # Choose your CR: NOTE: Containerd is only supported at this time
+    control_plane_ip: "192.168.2.70"    # Set as the IP address of your Master node
+    configure_firewalld: false          # Configure Firewall Rules. NOTE: Leave false for now as it breaks K8s
+    kube_purge_first: false             # Purge K8s first. Currently not in use
+  roles:
+    - kubernetes-stack

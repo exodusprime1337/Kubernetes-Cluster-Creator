@@ -1,0 +1,31 @@
+---
+- name: Include Pre-reqs setup task
+  include: pre_reqs.yml
+
+- name: Configure required OS changes
+  include: configure_os.yml
+
+- name: Include task to load required kernel modules and sysctl configs
+  include: load_kernel_modules.yml
+
+- name: Include task to configure /etc/hosts file on each node
+  include: configure_etc_hosts_file.yml
+
+- name: Set up and configure containerd
+  include: setup_containerd.yml
+  when: container_runtime == "containerd"
+
+- name: Include task to install k8s packages
+  include: install_k8s.yml
+
+- name: Include task to configure firewalld
+  include: configure_firewalld.yml
+  when: configure_firewalld
+
+- name: Configure Kubernetes on master node
+  include: configure_k8s.yml
+  when: "'master' in inventory_hostname"
+
+- name: Configure Kubernetes worker nodes
+  include: configure_k8s_nodes.yml
+  when: "'node' in inventory_hostname"

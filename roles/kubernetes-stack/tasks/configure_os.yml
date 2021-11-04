@@ -1,0 +1,21 @@
+---
+- name: Disable Swap
+  shell: swapoff -a
+
+- name: Edit /etc/fstab to fully disable swap
+  ansible.builtin.replace:
+    path: /etc/fstab
+    regexp: '^([^#].*?\sswap\s+.*)$'
+
+- name: Set Timezone
+  community.general.timezone:
+    name: "{{ timezone }}"
+
+- name: Enable and start chronyd service
+  ansible.builtin.service:
+    name: chronyd
+    state: started
+    enabled: yes
+
+- name: Manually sync time
+  shell:  chronyc sources
