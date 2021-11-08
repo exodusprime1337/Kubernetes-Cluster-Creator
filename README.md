@@ -5,7 +5,7 @@ This playbook creates a single master node and any number of worker nodes automa
 
 `Ingress` controller can be installed as part of the kubernetes configuration settings. Set `install_ingress_nginx` to true in step 5 below. 
 
-`Kadalu Storage` is available for use. Is is disabled by default and can be enabled in by setting `setup_kadalu_operator` to true in step 5 below. You can find more information about configuring Kadalu here: https://kadalu.io/docs/k8s-storage/devel/setup/
+`Kadalu Storage` is available for use. Is is disabled by default and can be enabled in by setting `setup_kadalu_operator` to true in step 5 below. You can find more information about configuring Kadalu here: https://kadalu.io/docs/k8s-storage/devel/setup/. You can find samples of the Kadalu storage class YAML for Kubernetes. 
 
 ## Requirements
 ### Operating System

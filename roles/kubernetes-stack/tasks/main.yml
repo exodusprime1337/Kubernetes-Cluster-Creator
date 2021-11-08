@@ -30,6 +30,5 @@
   include: configure_k8s_nodes.yml
   when: "'node' in inventory_hostname"
 
-# - name: Deploy the Kadalu opeartor
-#   include: setup_kadalu_operator.yml
-#   when: setup_kadalu_operator
+- name: Deploy and install Kubernetes addons
+  include: install_k8s_addons.yml

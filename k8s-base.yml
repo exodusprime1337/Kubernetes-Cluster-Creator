@@ -13,7 +13,7 @@
     control_plane_ip: "192.168.2.70"    # Set as the IP address of your Master node
     configure_firewalld: false          # Configure Firewall Rules. NOTE: Leave false for now as it breaks K8s
     kube_purge_first: false             # Purge K8s first. Currently not in use
-    setup_kadalu_operator: false        # Sets up the Kadalu operator. NOTE: False by default
-    install_ingress_nginx: false        # Install and configure the ingress-nginx controller. NOTE: False by default
+    setup_kadalu_operator: true        # Sets up the Kadalu operator. NOTE: False by default
+    install_ingress_nginx: true        # Install and configure the ingress-nginx controller. NOTE: False by default
   roles:
     - kubernetes-stack
