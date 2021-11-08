@@ -63,6 +63,7 @@ k8snode3
 ```
 
 5. Configure deployment options by editing the variables in `k8s-base.yml`
+```
 ---
 - name: K8S Setup Base
   hosts: k8snodes
