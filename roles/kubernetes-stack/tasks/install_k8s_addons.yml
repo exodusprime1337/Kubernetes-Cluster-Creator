@@ -4,11 +4,11 @@
     chmod +x ./kubectl-kadalu
     mv ./kubectl-kadalu /usr/local/bin/kubectl-kadalu
     kubectl kadalu install
-  when: (setup_kadalu_operator) and ("'master' in inventory_hostname")
-
+  when: setup_kadalu_operator
+  
 - name: Install and activate Ingress-Nginx
   shell: |
     helm upgrade --install ingress-nginx ingress-nginx \
     --repo https://kubernetes.github.io/ingress-nginx \
     --namespace ingress-nginx --create-namespace
-  when: (install_ingress_nginx) and ("'master' in inventory_hostname")
+  when: install_ingress_nginx
