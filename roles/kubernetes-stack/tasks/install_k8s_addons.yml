@@ -5,10 +5,20 @@
     mv ./kubectl-kadalu /usr/local/bin/kubectl-kadalu
     kubectl kadalu install
   when: setup_kadalu_operator
-  
+
 - name: Install and activate Ingress-Nginx
   shell: |
     helm upgrade --install ingress-nginx ingress-nginx \
     --repo https://kubernetes.github.io/ingress-nginx \
     --namespace ingress-nginx --create-namespace
   when: install_ingress_nginx
+
+- name: Copy Kadalu Storage Class yaml to master node
+  ansible.builtin.template:
+    src: 'kadalu_storage_class.j2'
+    dest: kadalu_sc.yaml
+  when: configure_kadalu_storage
+
+- name: Apply Kadalu Storage Class
+  shell: kubectl apply -f kadalu_sc.yaml
+  when: configure_kadalu_storage

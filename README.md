@@ -32,9 +32,20 @@ $ ansible-galaxy collection install ansible.posix
 - Installs Kubernetes version of your choice
 - Configures Kubernetes master node
 - Configures Kubernetes worker nodes
-- OPTIONAL: Installs the Kadalu Storage Operator
+- OPTIONAL: Installs and configures the Kadalu Storage Operator
+- OPTIONAL: Install ingress-nginx
 
-## How to Use this playbook
+## About Kadalu
+Kadalu is a lightweight glusterFS like storage platform for kubernetes workloads. 
+Provided is a template file with sample data to configure kadalu storage called `kadalu_storage_class.j2`. There are a few requirements to be aware of when setting up your hosts. Currently testing with just 3 total nodes. Using more or less than 3 worker nodes will result in a playbook error when using this to automatically create kadalu. If you've opted for more or less than 3 worker nodes, leave this configuration option off and set up your storage manually. 
+    
+### Kadalu configuration steps.
+    1. Attach storage to your worker nodes and do not format. IE: /dev/sdb 100GB hard disk
+    2. Configure the kadalu storage class template file to match your environment.
+    3. Set "setup_kadalu_operator" and "configure_kadalu_storage" to true.
+    4. Run the playbook as normal to automatically install Kadalu and replicated storage.
+
+## How to ussse this playbook
 
 1. Provision your master and worker nodes by deploying appropriately specced and supported operating systems. 
     - See `Operating System` support for details.
@@ -79,8 +90,9 @@ k8snode3
     control_plane_ip: "192.168.2.70"    # Set as the IP address of your Master node
     configure_firewalld: false          # Configure Firewall Rules. NOTE: Leave false for now as it breaks K8s
     kube_purge_first: false             # Purge K8s first. Currently not in use
-    setup_kadalu_operator: false        # Sets up the Kadalu operator. NOTE: False by default
-    install_ingress_nginx: false        # Install and configure the ingress-nginx controller. NOTE: False by default
+    setup_kadalu_operator: true         # Sets up the Kadalu operator. NOTE: False by default
+    configure_kadalu_storage: true      # Installs the Kadalu Storage class. NOTE: configure root/kubernetes-stack/templates/kadalu_storage_class.j2 first
+    install_ingress_nginx: true        # Install and configure the ingress-nginx controller. NOTE: False by default
   roles:
     - kubernetes-stack
 ```
