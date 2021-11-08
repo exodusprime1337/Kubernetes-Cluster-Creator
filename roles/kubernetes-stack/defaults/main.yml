@@ -33,6 +33,7 @@ redhat_packages:
   - wget
   - curl
   - firewalld
+  - python3
   - python3-firewall
   - yum-utils
   - lvm2

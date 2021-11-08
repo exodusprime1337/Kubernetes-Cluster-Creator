@@ -1,0 +1,7 @@
+---
+- name: Download and install Kadalu
+  shell: |
+    curl -LO https://github.com/kadalu/kadalu/releases/latest/download/kubectl-kadalu
+    chmod +x ./kubectl-kadalu
+    mv ./kubectl-kadalu /usr/local/bin/kubectl-kadalu
+    kubectl kadalu install

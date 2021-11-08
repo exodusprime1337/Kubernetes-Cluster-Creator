@@ -3,9 +3,9 @@ I got tired of manually creating Kubernetes clusters in my lab so i created this
 
 This playbook creates a single master node and any number of worker nodes automatically. It will automatically install the `Calico CNI` infrastructure. More will be added later. 
 
-`Ingress` controller is not yet included but will be in the near future.
+`Ingress` controller can be installed as part of the kubernetes configuration settings. Set `install_ingress_nginx` to true in step 5 below. 
 
-`Storage` is not included and will need to be configured by you. `Kadalu` will be included as an optional storage infrastructure in the future
+`Kadalu Storage` is available for use. Is is disabled by default and can be enabled in by setting `setup_kadalu_operator` to true in step 5 below. You can find more information about configuring Kadalu here: https://kadalu.io/docs/k8s-storage/devel/setup/
 
 ## Requirements
 ### Operating System
@@ -19,7 +19,7 @@ This playbook creates a single master node and any number of worker nodes automa
 - Bastion or Workstation host
     - Any host that supports running of Ansible playbooks
 ### Ansible Support
-Tested and running on `ansible-playbook 2.9.6`
+Tested and running on `ansible-playbook [core 2.11.6]`
 - Requires 2 collections to be installed
 ```
 $ ansible-galaxy collection install community.general
@@ -32,6 +32,8 @@ $ ansible-galaxy collection install ansible.posix
 - Installs Kubernetes version of your choice
 - Configures Kubernetes master node
 - Configures Kubernetes worker nodes
+- OPTIONAL: Installs the Kadalu Storage Operator
+
 ## How to Use this playbook
 
 1. Provision your master and worker nodes by deploying appropriately specced and supported operating systems. 
@@ -61,7 +63,7 @@ k8snode3
 ```
 
 5. Configure deployment options by editing the variables in `k8s-base.yml`
-```
+---
 - name: K8S Setup Base
   hosts: k8snodes
   remote_user: root
@@ -76,6 +78,8 @@ k8snode3
     control_plane_ip: "192.168.2.70"    # Set as the IP address of your Master node
     configure_firewalld: false          # Configure Firewall Rules. NOTE: Leave false for now as it breaks K8s
     kube_purge_first: false             # Purge K8s first. Currently not in use
+    setup_kadalu_operator: false        # Sets up the Kadalu operator. NOTE: False by default
+    install_ingress_nginx: false        # Install and configure the ingress-nginx controller. NOTE: False by default
   roles:
     - kubernetes-stack
 ```

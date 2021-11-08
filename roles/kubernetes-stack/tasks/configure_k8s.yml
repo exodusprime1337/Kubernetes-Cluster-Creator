@@ -35,3 +35,24 @@
   add_host:
     name: "k8s_token_holder"
     command: "{{ k8sjoincommand.stdout }}"
+
+- name: Install Helm Version 3
+  shell: |
+    curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    chmod 700 get_helm.sh
+    ./get_helm.sh
+
+- name: Download and install Kadalu
+  shell: |
+    curl -LO https://github.com/kadalu/kadalu/releases/latest/download/kubectl-kadalu
+    chmod +x ./kubectl-kadalu
+    mv ./kubectl-kadalu /usr/local/bin/kubectl-kadalu
+    kubectl kadalu install
+  when: setup_kadalu_operator
+
+- name: Install and activate Ingress-Nginx
+  shell: |
+    helm upgrade --install ingress-nginx ingress-nginx \
+    --repo https://kubernetes.github.io/ingress-nginx \
+    --namespace ingress-nginx --create-namespace
+  when: install_ingress_nginx
