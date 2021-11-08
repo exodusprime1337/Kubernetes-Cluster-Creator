@@ -32,3 +32,4 @@
 
 - name: Deploy and install Kubernetes addons
   include: install_k8s_addons.yml
+  when: "'master' in inventory_hostname"
