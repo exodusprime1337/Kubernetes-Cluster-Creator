@@ -45,7 +45,7 @@ Provided is a template file with sample data to configure kadalu storage called 
     3. Set "setup_kadalu_operator" and "configure_kadalu_storage" to true.
     4. Run the playbook as normal to automatically install Kadalu and replicated storage.
 
-## How to ussse this playbook
+## How to use this playbook
 
 1. Provision your master and worker nodes by deploying appropriately specced and supported operating systems. 
     - See `Operating System` support for details.
